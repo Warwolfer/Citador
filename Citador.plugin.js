@@ -3,9 +3,9 @@
 /* global $, Element */
 
 var Citador = (() => {
-	
+  
   var Toasts, DiscordSelectors, DiscordClasses, PluginUpdater, DiscordModules, WebpackModules, Tooltip, Modals, ReactTools, ContextMenu, Patcher, Settings, PluginUtilities, DiscordAPI, DiscordClassModules;
-	
+  
   return class Citador {
 
   constructor() {
@@ -32,15 +32,15 @@ var Citador = (() => {
   unload          () { this.deleteEverything();     }
   stop            () { this.deleteEverything();     }
   load            () {
-		let libraryScript=document.getElementById('ZLibraryScript');
-		if(!window.ZLibrary&&!libraryScript){
-			libraryScript=document.createElement('script');
-			libraryScript.setAttribute('type','text/javascript');
-			libraryScript.addEventListener("error",function(){if(typeof window.ZLibrary==="undefined"){window.BdApi.alert("Library Missing",`The library plugin needed for ${this.getName()} is missing and could not be loaded.<br /><br /><a href="https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js" target="_blank">Click here to download the library!</a>`);}}.bind(this));
-			libraryScript.setAttribute('src','https://rauenzi.github.io/BDPluginLibrary/release/ZLibrary.js');
-			libraryScript.setAttribute('id','ZLibraryScript');
-			document.head.appendChild(libraryScript);
-		}
+    let libraryScript=document.getElementById('ZLibraryScript');
+    if(!window.ZLibrary&&!libraryScript){
+      libraryScript=document.createElement('script');
+      libraryScript.setAttribute('type','text/javascript');
+      libraryScript.addEventListener("error",function(){if(typeof window.ZLibrary==="undefined"){window.BdApi.alert("Library Missing",`The library plugin needed for ${this.getName()} is missing and could not be loaded.<br /><br /><a href="https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js" target="_blank">Click here to download the library!</a>`);}}.bind(this));
+      libraryScript.setAttribute('src','https://rauenzi.github.io/BDPluginLibrary/release/ZLibrary.js');
+      libraryScript.setAttribute('id','ZLibraryScript');
+      document.head.appendChild(libraryScript);
+    }
   }
   async start     () {
     this.inject('link', {
@@ -52,13 +52,13 @@ var Citador = (() => {
 
     if(!this.strings)this.strings=await this.downloadJSON("https://raw.githubusercontent.com/nirewen/Citador/master/Citador.locales.json");
 
-	let libraryScript=document.getElementById('ZLibraryScript');
+  let libraryScript=document.getElementById('ZLibraryScript');
     if(typeof window.ZLibrary!=="undefined")this.initialize();
     else libraryScript.addEventListener("load",()=>this.initialize());
   }
   
   initialize() {
-	({Toasts, DiscordSelectors, DiscordClasses, PluginUpdater, DiscordModules, WebpackModules, Tooltip, Modals, ReactTools, ContextMenu, Patcher, Settings, PluginUtilities, DiscordAPI, DiscordClassModules} = ZLibrary);
+  ({Toasts, DiscordSelectors, DiscordClasses, PluginUpdater, DiscordModules, WebpackModules, Tooltip, Modals, ReactTools, ContextMenu, Patcher, Settings, PluginUtilities, DiscordAPI, DiscordClassModules} = ZLibrary);
     let self = this;
     PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), "https://raw.githubusercontent.com/nirewen/Citador/master/Citador.plugin.js");
     Toasts.default(`${this.getName()} ${this.getVersion()} ${this.local.startMsg.toLowerCase()}`);
@@ -73,7 +73,7 @@ var Citador = (() => {
     this.quoteURL          = 'https://github.com/nirewen/Citador?';
     this.CDN_URL           = 'https://cdn.discordapp.com/avatars/';
     this.ASSETS_URL        = 'https://discordapp.com';
-	DiscordClassModules.Messages.messages = WebpackModules.findByUniqueProperties(["messages"])
+  DiscordClassModules.Messages.messages = WebpackModules.findByUniqueProperties(["messages"])
       ? WebpackModules.findByUniqueProperties(["messages"]).messages : 'messages';
   
     /* 
@@ -366,17 +366,17 @@ var Citador = (() => {
     if (props) {
       if (e.shiftKey || $('.autocomplete-1TnWNR').length >= 1) return;
     
-      var messages	= props.messages.filter(m => !m.deleted),
-          guilds	= this.guilds,
-          msg		= props.messages[0],
-          cc		= ReactTools.getOwnerInstance($("form")[0]).props.channel,
-          msgC		= props.channel,
-          msgG		= guilds&&guilds[msgC.guild_id]?guilds[msgC.guild_id]:undefined,
-          author	= msg.author,
-          content	= this.MessageParser.parse(cc, $('.channelTextArea-1LDbYG textarea').val()).content,
-          text		= messages.map(m => m.content).join('\n'),
-          atServer	= msgC.guild_id && msgC.guild_id != cc.guild_id ? ` at ${msgG.name}` : '',
-          chName	= msgC.isDM() ? `@${msgC._getUsers()[0].username}` : msgC.isGroupDM() ? `${msgC.name}` : `#${msgC.name}`;
+      var messages  = props.messages.filter(m => !m.deleted),
+          guilds  = this.guilds,
+          msg   = props.messages[0],
+          cc    = ReactTools.getOwnerInstance($("form")[0]).props.channel,
+          msgC    = props.channel,
+          msgG    = guilds&&guilds[msgC.guild_id]?guilds[msgC.guild_id]:undefined,
+          author  = msg.author,
+          content = "",
+          text    = messages.map(m => m.content).join('\n'),
+          atServer  = msgC.guild_id && msgC.guild_id != cc.guild_id ? ` at ${msgG.name}` : '',
+          chName  = msgC.isDM() ? `@${msgC._getUsers()[0].username}` : msgC.isGroupDM() ? `${msgC.name}` : `#${msgC.name}`;
           
       if (this.selectionP) {
         var start = this.selectionP.start,
@@ -395,8 +395,9 @@ var Citador = (() => {
       }
       
       const format = 'DD-MM-YYYY HH:mm';
-      content     += `\n${'```'}\n${this.MessageParser.unparse(text, cc.id).replace(/\n?(```((\w+)?\n)?)+/g, '\n').trim()}\n${'```'}`;
-      content     += `\`${msg.nick || author.username} - ${this.moment(msg.timestamp).format(format)} | ${chName}${atServer}\``;
+      content     += `\n${'> **'}${msg.nick || author.username}${'**'} - ${this.moment(msg.timestamp).format(format)} | ${chName}${atServer}`;
+      content     += `\n${'> '}${this.MessageParser.unparse(text, cc.id).replace(/\n?(```((\w+)?\n)?)+/g, '\n').trim()}\n`;
+      content     += this.MessageParser.parse(cc, $('.channelTextArea-1LDbYG textarea').val()).content;
       content      = content.trim();
           
       this.MessageController.sendMessage(cc.id, { content });
@@ -532,8 +533,8 @@ var Citador = (() => {
   }
   
   get guilds () {
-	let guildsModule=BdApi.findModuleByProps('getGuild','getGuilds');
-	if(guildsModule)return guildsModule.getGuilds();
+  let guildsModule=BdApi.findModuleByProps('getGuild','getGuilds');
+  if(guildsModule)return guildsModule.getGuilds();
   }
   
   get defaultSettings() {
@@ -545,15 +546,15 @@ var Citador = (() => {
   }
   
   getIconTemplate(guild) {
-	let disabled=guild.id&&this.settings.disabledServers.includes(guild.id)?' disabled':'';
-	/*If the guild has the animated icon feature then try to use the animated icon, has a CSS backup image if the guild is not using the animated icon.*/
-	if(guild.icon&&guild.hasFeature("ANIMATED_ICON"))return `<a class="animatedGuild avatar-small${disabled}" style="background-image:url(https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.gif),url(https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp)"></a>`;
-	/*If the guild has an icon and does not have the animated icon feature then show the normal icon.*/
-	else if(guild.icon)return `<a class="avatar-small${disabled}" style="background-image:url(https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp)"></a>`;
-	/*If the guild has no icon then use the acronym.*/
-	else if(guild.acronym)return `<a class="avatar-small${disabled}">${guild.acronym}</a>`;
-	/*All else fails, then give it soemthing to work with.*/
-	else return `<a class="avatar-small${disabled}">UDF</a>`;
+  let disabled=guild.id&&this.settings.disabledServers.includes(guild.id)?' disabled':'';
+  /*If the guild has the animated icon feature then try to use the animated icon, has a CSS backup image if the guild is not using the animated icon.*/
+  if(guild.icon&&guild.hasFeature("ANIMATED_ICON"))return `<a class="animatedGuild avatar-small${disabled}" style="background-image:url(https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.gif),url(https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp)"></a>`;
+  /*If the guild has an icon and does not have the animated icon feature then show the normal icon.*/
+  else if(guild.icon)return `<a class="avatar-small${disabled}" style="background-image:url(https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp)"></a>`;
+  /*If the guild has no icon then use the acronym.*/
+  else if(guild.acronym)return `<a class="avatar-small${disabled}">${guild.acronym}</a>`;
+  /*All else fails, then give it soemthing to work with.*/
+  else return `<a class="avatar-small${disabled}">UDF</a>`;
   }
   
   saveSettings() {
